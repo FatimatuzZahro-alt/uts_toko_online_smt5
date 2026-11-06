@@ -1,0 +1,18 @@
+services:
+  # menambahkan service postgre
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: tokoOnline_postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: uts_toko_online
+    ports:
+      # format: "port di komputer kalian : port di container docker"
+      - "5433:5432"
+    volumes:
+      - postgres_data_volume:/var/lib/postgresql/data
+
+volumes:
+  postgres_data_volume:
