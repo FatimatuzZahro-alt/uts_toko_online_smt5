@@ -4,6 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import Joi from 'joi';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { CategoriesModule } from './categories/categories.module.js';
+import { ProductsModule } from './products/products.module.js';
+import { CustomersModule } from './customers/customers.module.js';
+import { OrdersModule } from './orders/orders.module.js';
+import { OrderItemsModule } from './order-items/order-items.module.js';
 
 @Module({
   imports: [
@@ -33,6 +38,11 @@ import { AppService } from './app.service.js';
       }),
       inject: [ConfigService],
     }),
+    CategoriesModule,
+    ProductsModule,
+    CustomersModule,
+    OrdersModule,
+    OrderItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
