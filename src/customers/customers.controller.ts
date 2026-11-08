@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customers.js';
 import { CustomersService } from './customers.service.js';
-import { CreateCategoryDto } from '../categories/dto/create-category.js';
 
 @Controller('customers')
 export class CustomersController {

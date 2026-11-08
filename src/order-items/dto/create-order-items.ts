@@ -5,6 +5,7 @@ export class CreateOrderItemDto {
     @IsUUID('4', { message: 'ID produk tidak valid' })
     readonly productId: string;
 
+
     @IsNotEmpty({ message: 'Jumlah harus diisi' })
     @IsInt({ message: 'Jumlah harus berupa bilangan bulat' })
     @Min(1, { message: 'Jumlah minimal 1' })
