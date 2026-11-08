@@ -39,4 +39,19 @@ export class CustomersService {
         await this.customerRepository.softDelete(id);
         return { message: 'Pelanggan berhasil dihapus', deletedId: id };
     }
+
+        // mengambil pelanggan beserta semua pesanannya
+    async findOneWithOrders(id: string): Promise<Customer> {
+        const customer = await this.customerRepository.findOne({
+            where: { id },
+            // relations: ambil juga data dari tabel orders yang berelasi
+            relations: { orders: true },
+            // urutkan pesanan dari yang terbaru
+            order: { orders: { createdAt: 'DESC' } },
+        });
+        if (!customer) {
+            throw new NotFoundException('Pelanggan tidak ditemukan');
+        }
+        return customer;
+    }
 }

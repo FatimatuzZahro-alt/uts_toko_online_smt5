@@ -36,6 +36,13 @@ export class CustomersController {
         return this.customerService.update((id), customer);
     }
 
+    // GET /customers/:id/orders
+    // pelanggan beserta daftar pesanannya (1 pelanggan : banyak pesanan)
+    @Get(':id/orders')
+    getCustomerWithOrders(@Param('id') id: string) {
+        return this.customerService.findOneWithOrders(id);
+    }
+
     //menghapus data kategori berdasarkan id
     @Delete(':id')
     deleteCustomer(@Param('id') id: string) { //param dipake buat ambil parameter dari URL
