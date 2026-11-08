@@ -9,6 +9,7 @@ import { ProductsModule } from './products/products.module.js';
 import { CustomersModule } from './customers/customers.module.js';
 import { OrdersModule } from './orders/orders.module.js';
 import { OrderItemsModule } from './order-items/order-items.module.js';
+import { PaymentsModule } from './payments/payments.module.js';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { OrderItemsModule } from './order-items/order-items.module.js';
     CustomersModule,
     OrdersModule,
     OrderItemsModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

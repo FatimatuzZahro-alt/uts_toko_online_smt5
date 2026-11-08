@@ -7,10 +7,13 @@ import { UpdateOrderItemDto } from './dto/update-order-items.js';
 export class OrderItemsController {
     constructor(private orderItemService: OrderItemsService) {}
 
-    // daftar item, bisa difilter: GET /order-items?orderId=...
+    // daftar item, bisa difilter: GET /order-items?orderId=... atau ?productId=...
     @Get()
-    getAllOrderItems(@Query('orderId') orderId?: string) {
-        return this.orderItemService.findAll(orderId);
+    getAllOrderItems(
+        @Query('orderId') orderId?: string,
+        @Query('productId') productId?: string,
+    ) {
+        return this.orderItemService.findAll(orderId, productId);
     }
 
     // detail satu item beserta informasi produk
@@ -30,6 +33,7 @@ export class OrderItemsController {
     updateOrderItem(@Param('id') id: string, @Body() item: UpdateOrderItemDto) {
         return this.orderItemService.update(id, item);
     }
+
 
     // menghapus item dari pesanan
     @Delete(':id')

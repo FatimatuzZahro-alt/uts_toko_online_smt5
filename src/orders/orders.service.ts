@@ -27,7 +27,7 @@ export class OrdersService {
     async findOne(id: string): Promise<Order> {
         const order = await this.orderRepository.findOne({
             where: { id },
-            relations: { customer: true, items: { product: true } },
+            relations: { customer: true, items: { product: true }, payments: true },
         });
         if (!order) {
             throw new NotFoundException('Pesanan tidak ditemukan');

@@ -5,6 +5,8 @@ import {
 import type { Relation } from 'typeorm';
 import { Customer } from '../../customers/entity/entity-customers.js';
 import { OrderItem } from '../../order-items/entity/entity-order-items.js';
+import { Payment } from '../../payments/entity/entity-payments.js';
+
 
 @Entity('orders')
 export class Order {
@@ -35,4 +37,8 @@ export class Order {
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
+
+    // mengambil daftar pembayaran lewat order.payments
+    @OneToMany(() => Payment, (payment) => payment.order)
+    payments: Relation<Payment[]>;
 }

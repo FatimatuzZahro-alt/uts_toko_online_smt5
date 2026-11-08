@@ -16,10 +16,14 @@ export class OrderItemsService {
         private readonly dataSource: DataSource,
     ) {}
 
-    async findAll(orderId?: string): Promise<OrderItem[]> {
+    // daftar item, bisa difilter berdasarkan pesanan dan/atau produk
+    async findAll(orderId?: string, productId?: string): Promise<OrderItem[]> {
         return this.orderItemRepository.find({
-            where: orderId ? { orderId } : {},
-            relations: { product: true },
+            where: {
+                ...(orderId && { orderId }),
+                ...(productId && { productId }),
+            },
+            relations: { product: true, order: true },
         });
     }
 
