@@ -5,6 +5,7 @@ import {
 import type { Relation } from 'typeorm';
 import { Order } from '../../orders/entity/entity-orders.js';
 
+
 @Entity('customers')
 export class Customer {
     @PrimaryGeneratedColumn('uuid')
@@ -33,4 +34,5 @@ export class Customer {
 
     @DeleteDateColumn({ name: 'deleted_at', nullable: true })
     deletedAt: Date | null;
+    
 }
