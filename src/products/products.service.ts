@@ -1,12 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { Product } from './entity/entity-products.js';
 import { Category } from '../categories/entity/entity-category.js';
 import { CreateProductDto } from './dto/create-products.js';
-import { BadRequestException } from '@nestjs/common';
-import { MoreThan } from 'typeorm';
 import { AdjustStockDto } from './dto/adjust-stock.dto.js';
+
+// batas maksimal tipe int di PostgreSQL
+const MAX_STOCK = 2147483647;
 
 @Injectable()
 export class ProductsService {
@@ -35,6 +36,7 @@ export class ProductsService {
         return product;
     }
 
+    // memastikan kategori yang dipilih benar-benar ada
     private async checkCategory(categoryId: string): Promise<void> {
         const category = await this.categoryRepository.findOneBy({ id: categoryId });
         if (!category) {
@@ -61,7 +63,7 @@ export class ProductsService {
         return { message: 'Produk berhasil dihapus', deletedId: id };
     }
 
-        // stok satu produk
+    // stok satu produk
     async getStock(id: string) {
         const product = await this.findOne(id);
         return {
@@ -72,7 +74,6 @@ export class ProductsService {
         };
     }
 
-    // daftar stok semua produk, bisa difilter yang tersedia saja
     async findAllStock(onlyAvailable = false) {
         const products = await this.productRepository.find({
             where: onlyAvailable ? { stock: MoreThan(0) } : {},
@@ -86,11 +87,19 @@ export class ProductsService {
     async adjustStock(id: string, dto: AdjustStockDto) {
         const product = await this.findOne(id);
         const newStock = product.stock + dto.adjustment;
+
+        // stok tidak boleh di bawah 0
         if (newStock < 0) {
             throw new BadRequestException(
                 `Stok tidak boleh negatif (stok saat ini ${product.stock})`,
             );
         }
+        if (newStock > MAX_STOCK) {
+            throw new BadRequestException(
+                `Stok tidak boleh melebihi ${MAX_STOCK} (stok saat ini ${product.stock})`,
+            );
+        }
+
         product.stock = newStock;
         await this.productRepository.save(product);
         return this.getStock(id);
