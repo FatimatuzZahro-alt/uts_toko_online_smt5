@@ -17,7 +17,7 @@ export class Customer {
     @Column({ type: 'varchar', length: 150, unique: true })
     email: string;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ type: 'varchar', length: 20, unique: true })
     phone: string;
 
     @Column({ type: 'text', nullable: true })

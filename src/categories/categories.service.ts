@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './entity/entity-category.js';
@@ -28,13 +28,28 @@ export class CategoriesService {
 
     async create(dto: CreateCategoryDto): Promise<Category> {
         const newCategory = this.categoryRepository.create(dto);
-        return await this.categoryRepository.save(newCategory);
+        try {
+            return await this.categoryRepository.save(newCategory);
+        } catch (error: any) {
+            // 23505 = pelanggaran unique (nama kategori sudah ada)
+            if (error?.code === '23505' || error?.driverError?.code === '23505') {
+                throw new ConflictException('Nama kategori sudah digunakan');
+            }
+            throw error;
+        }
     }
 
     async update(id: string, dto: CreateCategoryDto): Promise<Category> {
         const category = await this.findOne(id);
         const updated = this.categoryRepository.merge(category, dto);
-        return await this.categoryRepository.save(updated);
+        try {
+            return await this.categoryRepository.save(updated);
+        } catch (error: any) {
+            if (error?.code === '23505' || error?.driverError?.code === '23505') {
+                throw new ConflictException('Nama kategori sudah digunakan');
+            }
+            throw error;
+        }
     }
 
     async delete(id: string): Promise<{ message: string; deletedId: string }> {
